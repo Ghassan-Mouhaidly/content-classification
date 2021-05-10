@@ -18,7 +18,7 @@ class DataGenerator(object):
 
         self.TRAIN_TEST_SPLIT = train_test_split
         self.TRAIN_VAL_SPLIT = train_val_split
-        self.IMG_SIZE = img_size
+        self.IMG_RES = img_size
 
         self.max_rating = self.df['Rating'].max()
         self.max_year = self.df['Year'].max()
@@ -42,14 +42,14 @@ class DataGenerator(object):
     def _process_image(self, img_path):
         """
         """
-        img = cv2.imread(image_path, 1)
-        img = cv2.resize(img, self.IMG_SIZE)
+        img = cv2.imread(img_path, 1)
+        img = cv2.resize(img, self.IMG_RES[:2])
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = np.array(img) / 255.0
         
         return img
         
-    def generate_images(self, image_idx, is_training, batch_size):
+    def generate_images(self, image_idx, batch_size, is_training):
         """
         """
         images, genres, ratings, years = [], [], [], []
@@ -63,10 +63,14 @@ class DataGenerator(object):
                 year = movie['Year']
                 image_path = movie['Poster_path']
                 
-                img = self._process_image(image_path)
+                try:
+                    img = self._process_image(image_path)
+                except:
+                    print("* * * * * Image could not be loaded - skipping * * * * *")
+                    continue
                 
                 genres.append(to_categorical(genre, 8))
-                ratings.append(rating / self.rating)
+                ratings.append(rating / self.max_rating)
                 years.append(year / self.max_year)
                 images.append(img)
                 
