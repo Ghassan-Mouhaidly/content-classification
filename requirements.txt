@@ -1,6 +1,6 @@
 tensorflow >= 2.4.1
 importlib
-pickle
 pandas
 json
 glob
+yacs
