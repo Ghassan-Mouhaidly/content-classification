@@ -1,7 +1,7 @@
 # content-classification
 
 ## Abstract
-A fully modular pipeline for multi-output content classification - EECE 690 - AUB
+A fully modular pipeline for multi-output content classification - EECE 690 - AUB -
 The model is built using keras, with yacs for configurations. A data generator is also included.
 Training and visualisation is made with jupyter notebooks for simplicity.
 
