@@ -3,7 +3,7 @@ import importlib
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import BatchNormalization, GlobalAveragePooling2D
-from tensorflow.keras.layers import Dense, Dropout, Activation, Input
+from tensorflow.keras.layers import Dense, Dropout, Activation, Input, Flatten
 
 class MultiOutputModel(object):
     """
@@ -22,12 +22,12 @@ class MultiOutputModel(object):
     def _generic_layer(self, inputs):
         """
         """
-        x = Dense(256)(inputs)
+        x = Dense(128)(inputs)
         x = Activation("relu")(x)
         x = Dense(128)(x)
         x = Activation("relu")(x)
-        x = BatchNormalization()(x)
-        x = Dropout(0.5)(x)        
+        # x = BatchNormalization()(x)
+        x = Dropout(0.2)(x)        
         
         return x 
    
@@ -58,7 +58,8 @@ class MultiOutputModel(object):
         base_model = self._base_model(self.backbone, self.input_tensor)
         
         x = base_model.output
-        x = GlobalAveragePooling2D()(x)
+        # x = GlobalAveragePooling2D()(x)
+        x = Flatten()(x)
 
         branches = []
 
