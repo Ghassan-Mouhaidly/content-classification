@@ -66,7 +66,7 @@ class DataGenerator(object):
                 try:
                     img = self._process_image(image_path)
                 except:
-                    print("\n* * * * * Image could not be loaded - skipping * * * * *\n")
+                    print("\n* * * * * Image could not be loaded - skipping * * * * *")
                     continue
                 
                 genres.append(to_categorical(genre, 8))

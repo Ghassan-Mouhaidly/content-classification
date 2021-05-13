@@ -22,12 +22,13 @@ class MultiOutputModel(object):
     def _generic_layer(self, inputs):
         """
         """
-        x = Dense(128)(inputs)
+        x = Dense(256)(inputs)
         x = Activation("relu")(x)
+        x = Dropout(0.3)(x)
         x = Dense(128)(x)
         x = Activation("relu")(x)
         # x = BatchNormalization()(x)
-        x = Dropout(0.2)(x)        
+        x = Dropout(0.3)(x)        
         
         return x 
    
@@ -58,8 +59,8 @@ class MultiOutputModel(object):
         base_model = self._base_model(self.backbone, self.input_tensor)
         
         x = base_model.output
-        # x = GlobalAveragePooling2D()(x)
-        x = Flatten()(x)
+        x = GlobalAveragePooling2D()(x)
+        # x = Flatten()(x)
 
         branches = []
 
