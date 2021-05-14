@@ -5,6 +5,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.layers import Dense, Dropout, Activation, Input, Flatten
 
+
 class MultiOutputModel(object):
     """
     """
@@ -22,16 +23,26 @@ class MultiOutputModel(object):
     def _generic_layer(self, inputs):
         """
         """
-        x = Dense(256)(inputs)
+        x = Dense(1024)(inputs)
         x = Activation("relu")(x)
-        x = Dropout(0.3)(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0.5)(x)
+
+        dense_layers = [512, 256, 128]
+
+        for layer in dense_layers:
+            x = Dense(layer)(x)
+            x = Activation("relu")(x)
+            x = BatchNormalization()(x)
+            x = Dropout(0.5)(x)
+
         x = Dense(128)(x)
         x = Activation("relu")(x)
-        # x = BatchNormalization()(x)
-        x = Dropout(0.3)(x)        
-        
+        x = BatchNormalization()(x)
+        x = Dropout(0.5)(x)
+               
         return x 
-   
+
     def _generic_branch(self, base_model, output):
         """
         """
@@ -59,8 +70,8 @@ class MultiOutputModel(object):
         base_model = self._base_model(self.backbone, self.input_tensor)
         
         x = base_model.output
-        x = GlobalAveragePooling2D()(x)
-        # x = Flatten()(x)
+        # x = GlobalAveragePooling2D()(x)
+        x = Flatten()(x)
 
         branches = []
 

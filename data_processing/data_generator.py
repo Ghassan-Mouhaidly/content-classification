@@ -69,7 +69,7 @@ class DataGenerator(object):
                     print("\n* * * * * Image could not be loaded - skipping * * * * *")
                     continue
                 
-                genres.append(to_categorical(genre, 8))
+                genres.append(to_categorical(genre, 6))
                 ratings.append(rating / self.max_rating)
                 years.append(year / self.max_year)
                 images.append(img)
@@ -81,3 +81,31 @@ class DataGenerator(object):
                     
             if not is_training:
                 break
+
+    def generate_truth(self, test_idx, batch_size):
+        """
+        """
+        t_gen = self.generate_images(test_idx, batch_size, False)
+
+        images, genres_true, ratings_true, years_true = [], [], [], []
+
+        for test_batch in t_gen:
+            
+            image = test_batch[0]
+            labels = test_batch[1]
+            
+            images.extend(image)
+            genres_true.extend(labels[0])
+            ratings_true.extend(labels[1])
+            years_true.extend(labels[2])
+            
+        genres_true = np.array(genres_true)
+        ratings_true = np.array(ratings_true)
+        years_true = np.array(years_true)
+
+        genres_true = genres_true.argmax(axis=-1)
+        ratings_true = ratings_true * self.max_rating
+        years_true = years_true * self.max_year
+
+
+        return genres_true, ratings_true, years_true
