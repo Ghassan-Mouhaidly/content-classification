@@ -20,9 +20,6 @@ class DataGenerator(object):
         self.TRAIN_VAL_SPLIT = train_val_split
         self.IMG_RES = img_size
 
-        self.max_rating = self.df['Rating'].max()
-        self.max_year = self.df['Year'].max()
-
         self.df['Genre'] = self.df['Genre'].map(lambda genre: self.dataset_dict['Genre_alias'][genre])
         
     def split_dataset(self):
@@ -52,15 +49,13 @@ class DataGenerator(object):
     def generate_images(self, image_idx, batch_size, is_training):
         """
         """
-        images, genres, ratings, years = [], [], [], []
+        images, genres = [], []
 
         while True:
             for idx in image_idx:
                 movie = self.df.iloc[idx]
                 
                 genre = movie['Genre']
-                rating = movie['Rating']
-                year = movie['Year']
                 image_path = movie['Poster_path']
                 
                 try:
@@ -70,14 +65,12 @@ class DataGenerator(object):
                     continue
                 
                 genres.append(to_categorical(genre, 6))
-                ratings.append(rating / self.max_rating)
-                years.append(year / self.max_year)
                 images.append(img)
                 
                 if len(images) >= batch_size:
-                    yield np.array(images), [np.array(genres), np.array(ratings), np.array(years)]
+                    yield np.array(images), np.array(genres)
 
-                    images, genres, ratings, years = [], [], [], []
+                    images, genres = [], []
                     
             if not is_training:
                 break
@@ -87,7 +80,7 @@ class DataGenerator(object):
         """
         t_gen = self.generate_images(test_idx, batch_size, False)
 
-        images, genres_true, ratings_true, years_true = [], [], [], []
+        images, genres_true = [], []
 
         for test_batch in t_gen:
             
@@ -96,16 +89,9 @@ class DataGenerator(object):
             
             images.extend(image)
             genres_true.extend(labels[0])
-            ratings_true.extend(labels[1])
-            years_true.extend(labels[2])
             
         genres_true = np.array(genres_true)
-        ratings_true = np.array(ratings_true)
-        years_true = np.array(years_true)
 
         genres_true = genres_true.argmax(axis=-1)
-        ratings_true = ratings_true * self.max_rating
-        years_true = years_true * self.max_year
 
-
-        return genres_true, ratings_true, years_true
+        return genres_true
