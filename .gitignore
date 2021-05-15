@@ -131,3 +131,5 @@ dmypy.json
 data/
 
 Model_v1/
+
+content_transfer/Model_softmax/

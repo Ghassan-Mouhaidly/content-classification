@@ -8,7 +8,6 @@ _C.MODEL.STRUCTURE = [{0: {'type': 'Genre', 'outNeurons': 6, 'outActivation': 's
 
 _C.MODEL.BACKBONE = "InceptionV3"
 
-
 _C.IMAGE.RESOLUTION = (150, 200, 3)
 
 _C.HYPERPARAMS.TEST_SPLIT = 0.9

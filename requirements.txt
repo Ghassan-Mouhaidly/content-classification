@@ -5,3 +5,7 @@ json
 glob
 yacs
 scipy
+numpy
+cv2
+matplotlib
+sklearn
