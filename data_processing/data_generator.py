@@ -92,12 +92,12 @@ class DataGenerator(object):
         for test_batch in t_gen:
             
             image = test_batch[0]
-            labels = test_batch[1]
+            truth = test_batch[1]
             
             images.extend(image)
-            genres_true.extend(labels[0])
-            ratings_true.extend(labels[1])
-            years_true.extend(labels[2])
+            genres_true.extend(truth[0])
+            ratings_true.extend(truth[1])
+            years_true.extend(truth[2])
             
         genres_true = np.array(genres_true)
         ratings_true = np.array(ratings_true)

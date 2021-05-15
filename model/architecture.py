@@ -46,7 +46,6 @@ class MultiOutputModel(object):
     def _generic_branch(self, base_model, output):
         """
         """
-        # x = Lambda(lambda c: tf.image.rgb_to_grayscale(c))(inputs)        
         x = self._generic_layer(base_model)
         x = Dense(output['outNeurons'])(x)
         x = Activation(output['outActivation'], name=output['type'])(x)       
